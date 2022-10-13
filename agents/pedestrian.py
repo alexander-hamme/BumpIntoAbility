@@ -13,21 +13,28 @@ class Pedestrian:
     PEDESTRIAN_IMG = pyglet.image.load('resources/images/pedestrian_1.png')
 
     def __init__(self, x, y):
-        self.vx = random.uniform(-1, 1)
-        self.vy = random.uniform(-1, 1)
         self.x = x
         self.y = y
+        self.image = Pedestrian.PEDESTRIAN_IMG
+        self.width = self.image.width
+        self.height = self.image.height
+
+        self.center_x = self.x + self.image.width
+        self.center_y = self.y - self.image.height//2   # sprite starts from bottom left
+
+        self.vx = random.uniform(-1, 1)
+        self.vy = random.uniform(-1, 1)
         self.sprite = None
 
     def render(self, batch):
-        self.sprite = pyglet.sprite.Sprite(Pedestrian.PEDESTRIAN_IMG, x=self.x, y=self.y, batch=batch)
+        self.sprite = pyglet.sprite.Sprite(self.image, x=self.center_x, y=self.center_y, batch=batch)
 
     def do_walking(self, dt):
 
         max_v_mag = 70  # max velocity magnitude
 
-        self.vx += random.uniform(-max_v_mag/2, max_v_mag/2)
-        self.vy += random.uniform(-max_v_mag/3, max_v_mag/3)#randint(1,5)
+        self.vx += random.uniform(-max_v_mag/5, max_v_mag/5)
+        self.vy += random.uniform(-max_v_mag/7, max_v_mag/7)#randint(1,5)
 
         # threshold to max allowed, keeping sign
         if self.vx < 0:
@@ -45,8 +52,10 @@ class Pedestrian:
 
         self.do_bounds_check()
 
-        self.sprite.x = self.x
-        self.sprite.y = self.y
+        self.reset_center_coords()
+
+        self.sprite.x = self.center_x
+        self.sprite.y = self.center_y
 
     def do_bounds_check(self):
 
@@ -59,6 +68,10 @@ class Pedestrian:
             self.y = self.y % WINDOW_HEIGHT
         elif self.y <= 0:
             self.y = self.y + WINDOW_HEIGHT
+
+    def reset_center_coords(self):
+        self.center_x = self.x - self.image.width//2
+        self.center_y = self.y - self.image.height//2
 
     def update(self, dt):
         self.do_walking(dt)
