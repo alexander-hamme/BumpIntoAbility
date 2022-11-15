@@ -1,12 +1,11 @@
 import random
 
 import pyglet
-from pyglet import shapes
 
 import utils
 from agents import CONFIG_DICT
 from agents.biker import Biker
-from agents.map import Map
+from environment.map import Map
 from agents.pedestrian import Pedestrian
 
 WINDOW_WIDTH = CONFIG_DICT.get("window_width")
@@ -79,7 +78,7 @@ class City:
                     continue
 
                 if utils.distance_between(agent, pedestrian) <= (agent.width):
-                    print("collision!")
+                    # print("collision!")
 
                     collision_star = pyglet.shapes.Star((agent.center_x + pedestrian.center_x)//2,
                                                         (agent.center_y + pedestrian.center_y)//2,

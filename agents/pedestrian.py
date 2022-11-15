@@ -3,16 +3,18 @@ import random
 import pyglet
 
 from agents import CONFIG_DICT
+from agents.agent import Agent
 
 WINDOW_WIDTH = CONFIG_DICT.get("window_width")
 WINDOW_HEIGHT = CONFIG_DICT.get("window_height")
 
 
-class Pedestrian:
+class Pedestrian(Agent):
 
     PEDESTRIAN_IMG = pyglet.image.load('resources/images/pedestrian_1.png')
 
     def __init__(self, x, y):
+        super().__init__()
         self.x = x
         self.y = y
         self.image = Pedestrian.PEDESTRIAN_IMG
@@ -24,7 +26,6 @@ class Pedestrian:
 
         self.vx = random.uniform(-1, 1)
         self.vy = random.uniform(-1, 1)
-        self.sprite = None
 
     def render(self, batch):
         self.sprite = pyglet.sprite.Sprite(self.image, x=self.center_x, y=self.center_y, batch=batch)

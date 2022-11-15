@@ -1,7 +1,7 @@
 import pyglet
 
 from agents import CONFIG_DICT
-from agents.city import City
+from environment.city import City
 
 if __name__ == "__main__":
 
@@ -19,6 +19,17 @@ if __name__ == "__main__":
         window.clear()
         city.draw()
 
-    pyglet.clock.schedule_interval(city.run, interval=1 / 120.0)
+
+    @window.event
+    def on_mouse_release(x, y, button, modifiers):
+
+        print(x, y)
+
+        # # key "C" get press
+        # if symbol == key.:
+        #     # printing the message
+        #     print("Key : C is pressed")
+
+    pyglet.clock.schedule_interval(city.run, interval=1 / 360.0)
     pyglet.app.run()
 

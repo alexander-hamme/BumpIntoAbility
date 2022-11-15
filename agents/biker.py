@@ -3,17 +3,19 @@ import random
 import pyglet
 
 from agents import CONFIG_DICT
+from agents.agent import Agent
 
 WINDOW_WIDTH = CONFIG_DICT.get("window_width")
 WINDOW_HEIGHT = CONFIG_DICT.get("window_height")
 
 
-class Biker:
+class Biker(Agent):
 
     BIKER_IMG_1 = pyglet.image.load('resources/images/bike_1_small.png')
     BIKER_IMG_2 = pyglet.image.load('resources/images/bike_2_small.png')
 
     def __init__(self, x, y):
+        super().__init__()
         self.x = x
         self.y = y
         self.image = random.choice((Biker.BIKER_IMG_1, Biker.BIKER_IMG_2))
