@@ -1,6 +1,9 @@
 from pyglet.math import Vec2
 
-def get_wall_avoid_force(agent, x1_bound, y1_bound, x2_bound, y2_bound):
+# Todo consider the destination portion of this paper too: https://arxiv.org/pdf/cond-mat/9805244.pdf
+
+
+def get_wall_avoid_force(agent, x1_bound, y1_bound, x2_bound, y2_bound) -> Vec2:
     """
     Can be used for avoiding both game window bounds and stationary objects such as buildings
     :param agent:
@@ -35,23 +38,11 @@ def get_wall_avoid_force(agent, x1_bound, y1_bound, x2_bound, y2_bound):
         y_multiplier = 0
 
     if x_multiplier == y_multiplier == 0:
+        return Vec2(0, 0)
 
+    x_component =
 
     """
-            double prox_x = img_width / 2.0;
-        double prox_y = img_height / 2.0;
-
-        int centerx = this.x + (int) Math.round(prox_x);
-        int centery = this.y + (int) Math.round(prox_y);
-
-        int x_multiplier = (centerx < prox_x) ? 1 : (centerx > WINDOW_BOUNDS_X - prox_x) ? -1 : 0;
-        int y_multiplier = (centery < prox_y) ? 1 : (centery > WINDOW_BOUNDS_Y - prox_y) ? -1 : 0;
-
-
-        if (x_multiplier == 0 && y_multiplier == 0) {
-            obstacle_avoidance.setMagnitude(0.0);
-            return;
-        }
 
         // x component of Force increases as Gnat gets closer to obstacle
         double x_component = (x_multiplier == 1) ? prox_x - centerx : (x_multiplier == -1) ?
