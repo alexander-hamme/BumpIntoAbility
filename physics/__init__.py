@@ -43,10 +43,11 @@ def update_forces(agents, agents_matrix):
 
     avoid = get_obstacle_avoid_force(agents, obstacles)
 
-    print(avoid)
+    if np.sum(avoid) > 0:
+        print(avoid)
 
-    return avoid + get_agent_repulsion_forces(agents_matrix)
-    # pass
+    # return avoid + get_agent_repulsion_forces(agents_matrix)
+    return avoid
 
 
 
@@ -140,7 +141,7 @@ def get_obstacle_avoid_force(agents, obstacles):
     force = np.zeros((len(agents), 2))
     if len(obstacles) == 0:
         return force
-    obstacles = np.vstack(obstacles)   # todo can this happen earlier
+    # obstacles = np.vstack(obstacles)   # todo can this happen earlier
     pos = np.asarray([[a.x, a.y] for a in agents])
 
 
@@ -150,7 +151,66 @@ def get_obstacle_avoid_force(agents, obstacles):
     # is this a good approach? maybe...
 
 
-    print(pos)
+    # obstacles can be put back to a list of discrete points?
+
+
+    # TODO    Window bounds should be a separate calculation, not part of obstacles
+
+    for i, a in enumerate(agents):
+        ww = CONFIG_DICT["window_width"]
+        wh = CONFIG_DICT["window_height"]
+        a_width_thresh = a.width / 2
+        a_height_thresh = a.height / 2
+
+        # get distance away, including agent dimensions
+        # normalize the values
+        # multiple by np.exp(reverse sign of values)
+
+        bounds_distances = np.asarray([
+            [a.x - a_width_thresh - 0, a.y - a_height_thresh],
+            [(a.x + a_width_thresh) - ww, (a.y + a_height_thresh) - wh]
+            # [a.x - a_width_thresh - 0, wh - (a.y + a_height_thresh)],
+            # [ww - (a.x + a_width_thresh), a.y - a_height_thresh]
+        ], dtype=float)
+
+        # bounds_distances[bounds_distances < 0] = 0
+
+        print(f"bd = {bounds_distances}")
+
+        directions, dist = states.normalize(bounds_distances)
+
+        print(directions, dist)
+
+        _thresh = 2 * (threshold + ((a.width + a.height) / 2))
+
+        print(threshold, _thresh, a.width, a.height)
+
+        # if np.all(dist >= _thresh):
+        #     continue
+
+        dist_mask = dist < _thresh
+        print(dist_mask)
+        print(directions[dist_mask])
+        directions[dist_mask] *= np.exp(-dist[dist_mask].reshape(-1, 1) / sigma)
+
+        print(directions[dist_mask])
+
+        force[i] = np.sum(directions[dist_mask], axis=0)
+        a.fx, a.fy = np.sum(directions[dist_mask], axis=0)
+
+        print(force[i])
+
+    # print(f"pos={pos}")
+
+    return force * CONFIG_DICT["forces"]["obstacle_force"]["factor"]
+
+
+    # force is calculated by summing the vectors from all the nearest points to get a vector pointing away
+
+    # you could repeat this and filter the points ahead of time to only include close ones, PLUS subsample the points for fewer calculations
+
+    # Do you need to pick 3 closest points (with some min dist between them?)
+
 
     for i, (p, a) in enumerate(zip(pos, agents)):
 
@@ -163,6 +223,14 @@ def get_obstacle_avoid_force(agents, obstacles):
         if np.all(dist >= _thresh):
             continue
 
+        '''
+        np.asarray([[1,2],[3,4]]) * np.asarray([10,100])
+        array([[ 10, 200],
+               [ 30, 400]])
+        np.asarray([[1,2],[3,4]]) * np.asarray([10,100]).reshape(-1,1)
+        array([[ 10,  20],
+               [300, 400]])
+        '''
 
         dist_mask = dist < _thresh
         directions[dist_mask] *= np.exp(-dist[dist_mask].reshape(-1, 1) / sigma)

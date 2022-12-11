@@ -1,6 +1,6 @@
 window_width: 300 #1920
 window_height: 150 #720
-target_fps: 360
+target_fps: 1
 
 forces:
   scene:

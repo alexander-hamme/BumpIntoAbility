@@ -1,3 +1,4 @@
+import math
 import random
 
 import numpy as np
@@ -24,6 +25,7 @@ class City:
         self.pedestrians = []
         self.pedestrian_batch = pyglet.graphics.Batch()
         self.collision_stars = []
+        self.force_vectors = []
 
         self.agents = []  # all agents
 
@@ -39,7 +41,7 @@ class City:
             self.agents.append(biker)
 
     def add_pedestrians(self):
-        for i in range(2):
+        for i in range(1):
             pedestrian = Pedestrian(random.randint(20, WINDOW_WIDTH - 20), random.randint(20, WINDOW_HEIGHT - 20)) #(i * 53, WINDOW_HEIGHT - (i * 31))
             pedestrian.render(self.pedestrian_batch)
             self.pedestrians.append(pedestrian)
@@ -76,17 +78,24 @@ class City:
         for star in self.collision_stars:
             star.draw()
 
+
+
         for pedestrian in self.pedestrians:
             pyglet.shapes.Circle(pedestrian._bot_left_x, pedestrian._bot_left_y, 3, color=(0, 255, 0)).draw()
         for biker in self.bikers:
             pyglet.shapes.Circle(biker._bot_left_x, biker._bot_left_y, 3, color=(0, 255, 0)).draw()
 
+        for v_line in self.force_vectors:
+            v_line.draw()
+
         if len(self.collision_stars) > 0:
             pass
+
 
     def run(self, dt):
 
         self.collision_stars.clear()
+        self.force_vectors.clear()
 
         self.update_matrix()
 
@@ -120,8 +129,16 @@ class City:
                                                         rotation=15, color=(255, 0, 50))
                     self.collision_stars.append(collision_star)
 
-            agent.update(dt)
+            if agent.fx is not None and agent.fy is not None:
+                angle = math.atan2(agent.fy, agent.fx)
 
+                x = 5 * math.cos(angle)
+                y = 5 * math.sin(angle)
+
+                self.force_vectors.append(
+                    pyglet.shapes.Line(agent.x, agent.y, agent.x + x, agent.y + y, width=3, color=(255,0,0), batch=None)
+                )
+            agent.update(dt)
 
         # for pedestrian in self.pedestrians:
         #     pedestrian.update(dt)

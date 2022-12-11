@@ -26,6 +26,9 @@ class Agent(ABC):
         self.x: int = None  # center x
         self.y: int = None  # center y
 
+        self.fx: float = None  # net force x component
+        self.fy: float = None  # net force y component
+
         self.tau = Agent.TAU
 
         self.sprite: pyglet.sprite.Sprite = None

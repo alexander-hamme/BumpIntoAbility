@@ -65,7 +65,7 @@ class Pedestrian(Agent):
 
     def do_bounds_check(self):
 
-        ''' Pass to other side version
+        # ''' Pass to other side version
         if self._bot_left_x >= WINDOW_WIDTH:
             self._bot_left_x = self._bot_left_x % WINDOW_WIDTH
         elif self._bot_left_x <= 0:
@@ -75,7 +75,7 @@ class Pedestrian(Agent):
             self._bot_left_y = self._bot_left_y % WINDOW_HEIGHT
         elif self._bot_left_y <= 0:
             self._bot_left_y = self._bot_left_y + WINDOW_HEIGHT
-        '''
+        # '''
         pass
 
 

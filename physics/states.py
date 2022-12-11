@@ -32,9 +32,12 @@ def normalize(vecs: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     input: [n,2] ndarray
     output: (normalized vectors, norm factors)
     """
+
+    # norm factor is value used to divide each
+
     norm_factors = []
     for line in vecs:
-        norm_factors.append(np.linalg.norm(line))
+        norm_factors.append(np.linalg.norm(line))    # normalize each individual pair of points?
     norm_factors = np.array(norm_factors)
     normalized = vecs / np.expand_dims(norm_factors, -1)
     # get rid of nans
