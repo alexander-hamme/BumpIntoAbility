@@ -3,7 +3,7 @@ import random
 from pyglet import shapes
 import pyglet
 
-from agents import CONFIG_DICT
+from utils import CONFIG_DICT
 
 WINDOW_WIDTH = CONFIG_DICT.get("window_width")
 WINDOW_HEIGHT = CONFIG_DICT.get("window_height")

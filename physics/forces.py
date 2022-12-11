@@ -1,5 +1,12 @@
 import math
 
+import numpy as np
+
+from agents import CONFIG_DICT
+
+# Todo put in a config file
+force_params = CONFIG_DICT.get("forces")
+
 # from pyglet.math import Vec2
 
 # class Force2DVector:
@@ -30,3 +37,14 @@ def calculate_forces(list_of_agents):
             raise AttributeError(f"{agent.__class__.__name__} object missing "
                                  f"attribute{'s' if len(missing_attributes) > 1 else ''} "
                                  f"{missing_attributes}")
+
+
+def normal_motion_force(list_of_agents):
+    F0 = (
+        1.0
+        / list_of_agents.tau()
+        * (
+            np.expand_dims(list_of_agents.initial_speeds, -1) * list_of_agents.desired_directions() - list_of_agents.vel()
+        )
+    )
+    return F0 * self.factor

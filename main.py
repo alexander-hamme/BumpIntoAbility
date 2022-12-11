@@ -1,7 +1,8 @@
 import pyglet
+import yaml
 
-from agents import CONFIG_DICT
 from environment.city import City
+from utils import CONFIG_DICT
 
 if __name__ == "__main__":
 
@@ -30,6 +31,6 @@ if __name__ == "__main__":
         #     # printing the message
         #     print("Key : C is pressed")
 
-    pyglet.clock.schedule_interval(city.run, interval=1 / 360.0)
+    pyglet.clock.schedule_interval(city.run, interval=1 / float(CONFIG_DICT["target_fps"]))
     pyglet.app.run()
 
